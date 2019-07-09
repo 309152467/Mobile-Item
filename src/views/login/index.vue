@@ -17,12 +17,15 @@
         placeholder="请输入密码" required />
       </van-cell-group>
       <div class="login-btn">
-        <van-button type="info" class="btn">登录</van-button>
+        <van-button type="info" class="btn" @click.prevent="handleLogin">登录</van-button>
       </div>
     </form>
   </div>
 </template>
-<script type="text/javascript">
+
+<script>
+// 哪里用在哪里加载
+import axios from 'axios'
 export default {
   name: 'LoginIndex',
   data () {
@@ -33,10 +36,18 @@ export default {
       }
     }
   },
-  components: {}
+  methods: {
+    async handleLogin () {
+      const res = await axios({
+        method: 'POST',
+        url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
+        data: this.user
+      })
+      console.log(res)
+    }
+  }
 }
 </script>
-
 <style lang="less" scoped>
 .login-btn {
   padding: 10px;
