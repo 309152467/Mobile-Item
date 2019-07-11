@@ -47,7 +47,9 @@ export default {
       // console.log(res)
       try {
         const data = await login(this.user)
-        console.log(data)
+        // console.log(data)
+        // 通过提交mutation更新vuex容器中的装填
+        this.$store.commit('setUser', data)
       } catch (err) {
         console.log(err)
         console.log('登录失败')
