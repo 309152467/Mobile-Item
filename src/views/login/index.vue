@@ -10,6 +10,7 @@
           label="手机号"
           right-icon="question-o"
           placeholder="请输入手机号"
+          :error-message='mobileMessage'
         />
         <van-field v-model="user.code"
         type="password"
@@ -34,17 +35,19 @@ export default {
       user: {
         mobile: '15122608372',
         code: '123456'
-      }
+      },
+      mobileMessage: ''
     }
   },
   methods: {
     async handleLogin () {
-      // const res = await axios({
-      //   method: 'POST',
-      //   url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
-      //   data: this.user
-      // })
-      // console.log(res)
+      if (this.user.mobile.trim().length) {
+        this.mobileMessage = ''
+      } else {
+        this.mobileMessage = '请输入手机号'
+        return
+      }
+
       try {
         const data = await login(this.user)
         // console.log(data)
