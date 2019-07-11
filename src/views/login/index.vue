@@ -25,25 +25,33 @@
 
 <script>
 // 哪里用在哪里加载
-import axios from 'axios'
+// import axios from 'axios'
+import { login } from '@/api/user'
 export default {
   name: 'LoginIndex',
   data () {
     return {
       user: {
-        mobile: null,
-        code: null
+        mobile: '15122608372',
+        code: '123456'
       }
     }
   },
   methods: {
     async handleLogin () {
-      const res = await axios({
-        method: 'POST',
-        url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
-        data: this.user
-      })
-      console.log(res)
+      // const res = await axios({
+      //   method: 'POST',
+      //   url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
+      //   data: this.user
+      // })
+      // console.log(res)
+      try {
+        const data = await login(this.user)
+        console.log(data)
+      } catch (err) {
+        console.log(err)
+        console.log('登录失败')
+      }
     }
   }
 }
