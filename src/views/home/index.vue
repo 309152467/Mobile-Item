@@ -2,9 +2,9 @@
   <!-- <div>Home component</div> -->
  <div>
   <div class="home">
-   <van-nav-bar title="首页"></van-nav-bar>
+   <van-nav-bar title="首页" fixed></van-nav-bar>
 <!-- activeChannelIndex 绑定当前激活的标签页，使用索引 -->
-   <van-tabs v-model="activeChannelIndex">
+   <van-tabs v-model="activeChannelIndex" class="channel-tabs">
      <van-tab title="标签1">
 <!--下拉刷新isLoading 用来控制下拉刷新的 loading 状态
        下拉刷新的时候，它会自动将 loading 设置为 true
@@ -71,5 +71,16 @@ export default {
 width: 375px;
 height: 200px;
 background-color: #f40;
+}
+.channel-tabs{
+margin-bottom: 100px;
+}
+// 深度作用选择器
+.channel-tabs /deep/ .van-tabs__wrap{
+  position: fixed;
+  top: 92px
+}
+.channel-tabs /deep/ .van-tabs_content{
+   margin-top: 100px
 }
 </style>
