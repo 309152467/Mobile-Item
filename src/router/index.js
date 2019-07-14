@@ -8,7 +8,14 @@ export default new Router({
     {
       // name: 'home',
       path: '/',
-      component: () => import('@/views/home')
+      component: () => import('@/views/Tabbar-layout'),
+      children: [
+        {
+          name: 'home',
+          path: '',
+          component: () => import('@/views/home')
+        }
+      ]
     },
     {
       name: 'login',
