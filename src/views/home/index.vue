@@ -5,7 +5,11 @@
    <van-nav-bar title="首页" fixed></van-nav-bar>
 <!-- activeChannelIndex 绑定当前激活的标签页，使用索引 -->
    <van-tabs v-model="activeChannelIndex" class="channel-tabs">
-     <van-tab title="标签1">
+     <van-tab
+     v-for="channelItem in channels"
+     :key="channelItem.id"
+     :title="channelItem.name"
+     >
 <!--下拉刷新isLoading 用来控制下拉刷新的 loading 状态
        下拉刷新的时候，它会自动将 loading 设置为 true
        @refresh 当下拉刷新的时候会触发
@@ -29,7 +33,8 @@
 </div>
 </template>
 
-<script type="text/javascript">
+<script>
+import { getUserChannels } from '@/api/channel'
 export default {
   name: 'HomeIndex',
   data () {
@@ -38,11 +43,46 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      isLoading: false
+      isLoading: false,
+      channels: []
     }
   },
-
+  created () {
+    this.loadchannels()
+  },
   methods: {
+    async loadchannels () {
+      const { user } = this.$store.state
+      let channels = []
+      // 已登录
+      if (user) {
+        const data = await getUserChannels()
+        channels = data.channels
+      } else {
+        // 未登录
+        // 如果有本地存储数据则使用本地存储中的频道列表
+        const localchannels = JSON.parse(window.localStorage.getItem('channels'))
+        if (localchannels) {
+          channels = localchannels
+        } else {
+          // 如果没有本地存储频道数据则请求获取默认推荐频道列表
+          const data = await getUserChannels()
+          channels = data.channels
+        }
+      }
+      // 修改channels,将这个数据结构修改为满足我们使用的需要
+      channels.forEach(item => {
+        // 用来存储当前文章的列表
+        item.articles = []
+        // 控制当前频道的下拉刷新loading状态
+        item.downPullLoading = false
+        // 控制当前频道的上拉加载更多的loading状态
+        item.upPullLoading = false
+        // 控制当前频道数据是否加载完毕
+        item.upPullFinished = false
+      })
+      this.channels = channels
+    },
     onLoad () {
       console.log('onLoad')
       // 异步更新数据
